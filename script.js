@@ -37,7 +37,7 @@
       $('fieldset:eq('+i+')').hide();
     }
 
-
+    $(selectAllInputs[0]).prop('checked',true);
 
     var links = $('.link-checkbox');
     var allInputs = $('form input');
@@ -90,5 +90,6 @@
       }
     }
 
+    $('li').show();
 
 })(jQuery);
