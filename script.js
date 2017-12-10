@@ -1,95 +1,110 @@
-(function($, undefined){
+(function ($, undefined) {
 
-    var selectAllInputs = $('.select-all');
-    console.log('selectAllInputs', selectAllInputs[0]);
-    $(selectAllInputs[0]).on('click', function (e){
-      if ($(this).prop('checked')) {
-          $('form').find('.link-checkbox').prop('checked', true);
-      } else {
-          $('form').find('.link-checkbox').prop('checked', false);
-      }
-    })
+    // Global show group variables
+    var allInputs = $('form input');
+    var fieldsets = $('fieldset');
 
+    // input fields im main section
     var mainGroupInputs = $('#main-group input');
-      for (var i = 1; i < mainGroupInputs.length; i++) {
+    // "All 1-3" button
+    /*$(mainGroupInputs[0]).on('click', function (e) {
+        if ($(this).prop('checked')) {
+            $('li').show();
+        } else {
+            $('li').hide();
+        }
+    })*/
+    // Handle clicks on Childboxes 1,2,3
+    for (var i = 1; i < mainGroupInputs.length; i++) {
         $(mainGroupInputs[i]).on('click', function () {
-          var fieldsetID = $(this).data('target');
-          if($(this).prop('checked')) {
-            $('#'+fieldsetID).show();
-          } else {
-            $('#'+fieldsetID).hide();
-          }
+            var fieldsetID = $(this).data('target');
+            if ($(this).prop('checked')) {
+                $(mainGroupInputs[0]).prop('checked', false);
+                $('#' + fieldsetID).show();
+                $('#' + fieldsetID).find('.form-check-input').prop('checked',false);
+                $('#' + fieldsetID).find('.select-all').prop('checked',true);
+            } else {
+                $('#' + fieldsetID).hide();
+                $('#' + fieldsetID).find('.form-check-input').prop('checked',false);
+            }
 
         })
-      }
-
-
-    for (var i = 1; i < selectAllInputs.length; i++) {
-      $(selectAllInputs[i]).on('click', function () {
-          if ($(this).prop('checked')) {
-              console.log('true',this);
-              $(this).parents('fieldset').find('input').prop('checked', true);
-          } else {
-              $(this).parents('fieldset').find('input').prop('checked', false);
-              console.log('false',this);
-          }
-      })
-      $('fieldset:eq('+i+')').hide();
     }
 
-    $(selectAllInputs[0]).prop('checked',true);
+    /* Function: each fieldset on click All Button uncheck others and opposite*/
+    fieldsets.each(function (i, fieldset) {
+        var inputs = $(fieldset).find('input');
+
+        $(inputs[0]).on('click', function () {
+            if ($(this).prop('checked')) {
+                $(inputs[1]).prop('checked', false);
+                $(inputs[2]).prop('checked', false);
+                $(inputs[3]).prop('checked', false);
+            }
+        })
+
+        for (var j = 1; j < inputs.length; j++) {
+            $(inputs[j]).on('click', function () {
+                if ($(this).prop('checked')) {
+                    $(inputs[0]).prop('checked', false);
+                }
+            })
+        }
+
+    })
 
     var links = $('.link-checkbox');
-    var allInputs = $('form input');
-    handleCheckboxes();
+    //handleCheckboxes();
 
 
-    $(links).on('click', handleMainAllCheckbox);
+
     $(allInputs).on('change', handleCheckboxes);
 
     function handleCheckboxes(e) {
-        //console.log(e);
-        var inputGroups = $('.inputs-group');
-        for (var i = 1; i < inputGroups.length; i++) {
-            //console.log(inputGroups[i]);
-            var inputsInFieldset = $(inputGroups[i]).find('input');
-            for (var j = 1; j < inputsInFieldset.length; j++) {
-                //console.log(inputsInFieldset[j]);
-                var targetID = $(inputsInFieldset[j]).data('target');
-                if ($(inputsInFieldset[j]).prop('checked')) {
-                    $('#'+targetID).show();
+
+        if ($(mainGroupInputs[0]).prop('checked')) {
+            for (var i = 1; i < allInputs.length; i++) {
+                $(allInputs[i]).prop('checked', false);
+            }
+            for (var i = 1; i < fieldsets.length; i++) {
+                $(fieldsets[i]).hide();
+            }
+            $('li li').show();
+        } else {
+            var inputGroups = $('.inputs-group');
+            for (var i = 1; i < inputGroups.length; i++) {
+                //console.log(inputGroups[i]);
+                var inputsInFieldset = $(inputGroups[i]).find('input');
+                if ($(inputsInFieldset[0]).prop('checked')) {
+                    for (var j = 1; j < inputsInFieldset.length; j++) {
+                        console.log('inputsInFieldset'+j, inputsInFieldset[j]);
+                        var targetID = $(inputsInFieldset[j]).data('target');
+                        $('#' + targetID).show();
+                    }
                 } else {
-                    $('#'+targetID).hide();
+                    for (var j = 1; j < inputsInFieldset.length; j++) {
+                        console.log('inputsInFieldset'+j, inputsInFieldset[j]);
+                        var targetID = $(inputsInFieldset[j]).data('target');
+                        if ($(inputsInFieldset[j]).prop('checked')) {
+                            $('#' + targetID).show();
+                        } else {
+                            $('#' + targetID).hide();
+                        }
+                    }
                 }
             }
-            if ($(inputsInFieldset[1]).prop('checked')&&$(inputsInFieldset[2]).prop('checked')&&$(inputsInFieldset[3]).prop('checked')) {
-                $(inputsInFieldset[0]).prop('checked', true);
-            } else {
-                $(inputsInFieldset[0]).prop('checked', false);
-            }
-            targetID = $(inputsInFieldset[1]).data('target');
-            if ($(inputsInFieldset[1]).prop('checked')||$(inputsInFieldset[2]).prop('checked')||$(inputsInFieldset[3]).prop('checked')) {
-                $('#'+targetID).parents('li').show();
-            } else {
-                $('#'+targetID).parents('li').hide();
-            }
         }
-      }
 
 
-
-    function handleMainAllCheckbox() {
-      var n = true;
-      for (var i = 0; i < links.length; i++) {
-        if (!$(links[i]).prop('checked')) {n = false;break;}
-      }
-      if (n === true) {
-        $(selectAllInputs[0]).prop('checked',true);
-      } else {
-        $(selectAllInputs[0]).prop('checked',false);
-      }
     }
 
+
+
+    /* Commands on init */
+    $(mainGroupInputs[0]).prop('checked', true);
     $('li').show();
+    for (var i = 1; i < fieldsets.length; i++) {
+        $(fieldsets[i]).hide();
+    }
 
 })(jQuery);
