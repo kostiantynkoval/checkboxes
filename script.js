@@ -7,13 +7,6 @@
     // input fields im main section
     var mainGroupInputs = $('#main-group input');
     // "All 1-3" button
-    /*$(mainGroupInputs[0]).on('click', function (e) {
-        if ($(this).prop('checked')) {
-            $('li').show();
-        } else {
-            $('li').hide();
-        }
-    })*/
     // Handle clicks on Childboxes 1,2,3
     for (var i = 1; i < mainGroupInputs.length; i++) {
         $(mainGroupInputs[i]).on('click', function () {
@@ -54,11 +47,6 @@
     })
 
     var links = $('.link-checkbox');
-    //handleCheckboxes();
-
-
-
-    $(allInputs).on('change', handleCheckboxes);
 
     function handleCheckboxes(e) {
 
@@ -73,17 +61,14 @@
         } else {
             var inputGroups = $('.inputs-group');
             for (var i = 1; i < inputGroups.length; i++) {
-                //console.log(inputGroups[i]);
                 var inputsInFieldset = $(inputGroups[i]).find('input');
                 if ($(inputsInFieldset[0]).prop('checked')) {
                     for (var j = 1; j < inputsInFieldset.length; j++) {
-                        console.log('inputsInFieldset'+j, inputsInFieldset[j]);
                         var targetID = $(inputsInFieldset[j]).data('target');
                         $('#' + targetID).show();
                     }
                 } else {
                     for (var j = 1; j < inputsInFieldset.length; j++) {
-                        console.log('inputsInFieldset'+j, inputsInFieldset[j]);
                         var targetID = $(inputsInFieldset[j]).data('target');
                         if ($(inputsInFieldset[j]).prop('checked')) {
                             $('#' + targetID).show();
@@ -94,8 +79,6 @@
                 }
             }
         }
-
-
     }
 
 
@@ -106,5 +89,7 @@
     for (var i = 1; i < fieldsets.length; i++) {
         $(fieldsets[i]).hide();
     }
+    //handleCheckboxes();
+    $(allInputs).on('change', handleCheckboxes);
 
 })(jQuery);
