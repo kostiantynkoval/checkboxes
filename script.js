@@ -8,9 +8,11 @@
 
     // input fields im main section
     var mainGroupInputs = $('#main-group input');
+    console.log('mainGroupInputs',mainGroupInputs.length);
+
     // "All 1-3" button
     // Handle clicks on Childboxes 1,2,3
-    for (var i = 1; i < 4; i++) {
+    for (var i = 1; i < mainGroupInputs.length; i++) {
         $(mainGroupInputs[i]).on('click', function () {
             var fieldsetID = $(this).data('target');
             if ($(this).prop('checked')) {
@@ -32,14 +34,14 @@
 
         $(inputs[0]).on('click', function () {
             if ($(this).prop('checked')) {
-                $(inputs[1]).prop('checked', false);
-                $(inputs[2]).prop('checked', false);
-                $(inputs[3]).prop('checked', false);
+                for (var n = 1; n < inputs.length; n++) {
+                    $(inputs[n]).prop('checked', false);
+                }
             }
             handleCheckboxes();
         })
 
-        for (var j = 1; j < 4; j++) {
+        for (var j = 1; j < inputs.length; j++) {
             $(inputs[j]).on('click', function () {
                 if ($(this).prop('checked')) {
                     $(inputs[0]).prop('checked', false);
@@ -54,29 +56,30 @@
 
     function handleCheckboxes() {
         if ($(mainGroupInputs[0]).prop('checked')) {
-            for (var i = 1; i < 16; i++) {
+            for (var i = 1; i < allInputs.length; i++) {
                 $(allInputs[i]).prop('checked', false);
             }
-            for (var i = 1; i < 4; i++) {
+            for (var i = 1; i < fieldsets.length; i++) {
                 $(fieldsets[i]).hide();
             }
             $('li li').show();
         } else {
             var inputGroups = $('.inputs-group');
-            for (var i = 1; i < 4; i++) {
+            console.log('inputGroups', inputGroups.length)
+            for (var i = 1; i < inputGroups.length; i++) {
                 var inputsInFieldset = $(inputGroups[i]).find('input');
                 if ($(inputsInFieldset[0]).prop('checked')) {
-                    for (var j = 1; j < 4; j++) {
+                    for (var j = 1; j < inputGroups.length; j++) {
                         var targetID = $(inputsInFieldset[j]).data('target');
-                        $('#' + targetID).show();
+                        $('.' + targetID).show();
                     }
                 } else {
-                    for (var j = 1; j < 4; j++) {
+                    for (var j = 1; j < inputGroups.length; j++) {
                         var targetID = $(inputsInFieldset[j]).data('target');
                         if ($(inputsInFieldset[j]).prop('checked')) {
-                            $('#' + targetID).show();
+                            $('.' + targetID).show();
                         } else {
-                            $('#' + targetID).hide();
+                            $('.' + targetID).hide();
                         }
                     }
                 }
