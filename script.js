@@ -5,6 +5,9 @@
     // Global show group variables
     var allInputs = $('form input');
     var fieldsets = $('fieldset');
+    var currentPage = 0;
+    var totalPages = 1;
+    var listItems;
 
     // input fields im main section
     var mainGroupInputs = $('#main-group input');
@@ -39,6 +42,14 @@
                 }
             }
             handleCheckboxes();
+            listItems = $('#itemsSection li.list-item.visible');
+            if (listItems.length>10) {
+                totalPages = Math.ceil(listItems.length/10);
+                paginationHandler('#pagination');
+                handleListItems();
+            } else {
+                $('#pagination ul').html('');
+            }
         })
 
         for (var j = 1; j < inputs.length; j++) {
@@ -47,6 +58,14 @@
                     $(inputs[0]).prop('checked', false);
                 }
                 handleCheckboxes();
+                listItems = $('#itemsSection li.list-item.visible');
+                if (listItems.length>10) {
+                    totalPages = Math.ceil(listItems.length/10);
+                    paginationHandler('#pagination');
+                    handleListItems();
+                } else {
+                    $('#pagination ul').html('');
+                }
             })
         }
 
@@ -62,24 +81,23 @@
             for (var i = 1; i < fieldsets.length; i++) {
                 $(fieldsets[i]).hide();
             }
-            $('li li').show();
+            $('#itemsSection li').addClass('visible');
         } else {
             var inputGroups = $('.inputs-group');
-            console.log('inputGroups', inputGroups.length)
             for (var i = 1; i < inputGroups.length; i++) {
                 var inputsInFieldset = $(inputGroups[i]).find('input');
                 if ($(inputsInFieldset[0]).prop('checked')) {
                     for (var j = 1; j < inputGroups.length; j++) {
                         var targetID = $(inputsInFieldset[j]).data('target');
-                        $('.' + targetID).show();
+                        $('.' + targetID).addClass('visible');
                     }
                 } else {
                     for (var j = 1; j < inputGroups.length; j++) {
                         var targetID = $(inputsInFieldset[j]).data('target');
                         if ($(inputsInFieldset[j]).prop('checked')) {
-                            $('.' + targetID).show();
+                            $('.' + targetID).addClass('visible');
                         } else {
-                            $('.' + targetID).hide();
+                            $('.' + targetID).removeClass('visible');
                         }
                     }
                 }
@@ -89,11 +107,63 @@
 
 
 
-    /* Commands on init */
-    $(mainGroupInputs[0]).prop('checked', true);
-    $('li').show();
-    for (var i = 1; i < fieldsets.length; i++) {
-        $(fieldsets[i]).hide();
+    function paginationHandler(paginationID) {
+          console.log('totalPages', totalPages);
+          currentPage = parseInt(currentPage);
+          totalPages = parseInt(totalPages);
+          $(paginationID).removeClass('collapse');
+          var pageButtons = "<li class=\"page-item to-first-page\"><a class=\"page-link\" data-page=\"0\" href=\"\" aria-label=\"First\"><span aria-hidden=\"true\">&laquo;</span><span class=\"sr-only\">First</span></a></li>";
+          for (var i = 0; i < totalPages; i++) {
+              pageButtons += "<li class=\"page-item\"><a class=\"page-link\" data-page=\""+(i)+"\" href=\"\">"+(i+1)+"</a></li>";
+          }
+          pageButtons += "<li class=\"page-item to-last-page\"><a class=\"page-link\" data-page=\""+(totalPages-1)+"\" href=\"\" aria-label=\"Last\"><span aria-hidden=\"true\">&raquo;</span><span class=\"sr-only\">Last</span></a></li>";
+          $(paginationID+' ul').html(pageButtons);
+
     }
+
+      function handleListItems() {
+
+          currentPage = parseInt($(this).data('page')) || 0;
+          $('#pagination ul').find("li").removeClass('active').removeClass('disabled');
+          $('#pagination ul').find("li:eq("+(+currentPage+1)+")").addClass('active');
+          console.log('page ',currentPage);
+          if (currentPage===0) {
+              $('#pagination ul').find("li:eq(0)").addClass('disabled')
+          }
+          if (currentPage===totalPages-1) {
+              $('#pagination ul').find("li:eq("+(totalPages+1)+")").addClass('disabled')
+          }
+          for (var i = 0; i < listItems.length; i++) {
+              if (i >= currentPage * 10 && i < currentPage * 10 +10) {
+                  $(listItems[i]).addClass('visible')
+              } else {
+                  $(listItems[i]).removeClass('visible')
+              }
+
+          }
+          return false;
+      }
+
+      $('#pagination').on('click', '.page-link', handleListItems)
+
+
+
+      /* Commands on init */
+      $(mainGroupInputs[0]).prop('checked', true);
+      $('#itemsSection li').addClass('visible');
+      for (var i = 1; i < fieldsets.length; i++) {
+          $(fieldsets[i]).hide();
+      }
+
+      // Pagination init
+      listItems = $('#itemsSection li.list-item');
+      console.log('listItems', listItems);
+      totalPages = Math.ceil(listItems.length/10);
+
+      if (listItems.length>10) {
+          paginationHandler('#pagination');
+          handleListItems();
+      }
+
   })
 })(jQuery);

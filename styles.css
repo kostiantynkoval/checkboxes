@@ -1,0 +1,6 @@
+.list-item {
+    display: none;
+}
+.list-item.visible {
+    display: block;
+}
