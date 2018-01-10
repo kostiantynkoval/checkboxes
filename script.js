@@ -11,10 +11,9 @@
 
     // input fields im main section
     var mainGroupInputs = $('#main-group input');
-    console.log('mainGroupInputs',mainGroupInputs.length);
 
     // "All 1-3" button
-    // Handle clicks on Childboxes 1,2,3
+    // Handle clicks on Childboxes 1,2,3 etc.
     for (var i = 1; i < mainGroupInputs.length; i++) {
         $(mainGroupInputs[i]).on('click', function () {
             var fieldsetID = $(this).data('target');
@@ -42,7 +41,7 @@
                 }
             }
             handleCheckboxes();
-            listItems = $('#itemsSection li.list-item.visible');
+            listItems = $('#itemsSection a.list-item.visible');
             if (listItems.length>10) {
                 totalPages = Math.ceil(listItems.length/10);
                 paginationHandler('#pagination');
@@ -58,7 +57,7 @@
                     $(inputs[0]).prop('checked', false);
                 }
                 handleCheckboxes();
-                listItems = $('#itemsSection li.list-item.visible');
+                listItems = $('#itemsSection a.list-item.visible');
                 if (listItems.length>10) {
                     totalPages = Math.ceil(listItems.length/10);
                     paginationHandler('#pagination');
@@ -81,7 +80,7 @@
             for (var i = 1; i < fieldsets.length; i++) {
                 $(fieldsets[i]).hide();
             }
-            $('#itemsSection li').addClass('visible');
+            $('#itemsSection a').addClass('visible');
         } else {
             var inputGroups = $('.inputs-group');
             for (var i = 1; i < inputGroups.length; i++) {
@@ -108,7 +107,6 @@
 
 
     function paginationHandler(paginationID) {
-          console.log('totalPages', totalPages);
           currentPage = parseInt(currentPage);
           totalPages = parseInt(totalPages);
           $(paginationID).removeClass('collapse');
@@ -126,7 +124,6 @@
           currentPage = parseInt($(this).data('page')) || 0;
           $('#pagination ul').find("li").removeClass('active').removeClass('disabled');
           $('#pagination ul').find("li:eq("+(+currentPage+1)+")").addClass('active');
-          console.log('page ',currentPage);
           if (currentPage===0) {
               $('#pagination ul').find("li:eq(0)").addClass('disabled')
           }
@@ -150,14 +147,13 @@
 
       /* Commands on init */
       $(mainGroupInputs[0]).prop('checked', true);
-      $('#itemsSection li').addClass('visible');
+      $('#itemsSection a').addClass('visible');
       for (var i = 1; i < fieldsets.length; i++) {
           $(fieldsets[i]).hide();
       }
 
       // Pagination init
-      listItems = $('#itemsSection li.list-item');
-      console.log('listItems', listItems);
+      listItems = $('#itemsSection a.list-item');
       totalPages = Math.ceil(listItems.length/10);
 
       if (listItems.length>10) {
