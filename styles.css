@@ -4,3 +4,10 @@
 .list-item.visible {
     display: block;
 }
+#pagination .pagination {
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    flex-flow: row nowrap;
+    justify-content: center;
+}

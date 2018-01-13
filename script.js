@@ -41,7 +41,7 @@
                 }
             }
             handleCheckboxes();
-            listItems = $('#itemsSection a.list-item.visible');
+            listItems = $('#itemsSection .list-item.visible');
             if (listItems.length>10) {
                 totalPages = Math.ceil(listItems.length/10);
                 paginationHandler('#pagination');
@@ -56,8 +56,9 @@
                 if ($(this).prop('checked')) {
                     $(inputs[0]).prop('checked', false);
                 }
+                console.log('checked', $(this).data('target'));
                 handleCheckboxes();
-                listItems = $('#itemsSection a.list-item.visible');
+                listItems = $('#itemsSection .list-item.visible');
                 if (listItems.length>10) {
                     totalPages = Math.ceil(listItems.length/10);
                     paginationHandler('#pagination');
@@ -70,7 +71,6 @@
 
     })
 
-    var links = $('.link-checkbox');
 
     function handleCheckboxes() {
         if ($(mainGroupInputs[0]).prop('checked')) {
@@ -80,19 +80,24 @@
             for (var i = 1; i < fieldsets.length; i++) {
                 $(fieldsets[i]).hide();
             }
-            $('#itemsSection a').addClass('visible');
+            $('#itemsSection .list-item').addClass('visible');
         } else {
             var inputGroups = $('.inputs-group');
             for (var i = 1; i < inputGroups.length; i++) {
                 var inputsInFieldset = $(inputGroups[i]).find('input');
+                console.log('inputsInFieldset', inputsInFieldset);
+
                 if ($(inputsInFieldset[0]).prop('checked')) {
-                    for (var j = 1; j < inputGroups.length; j++) {
+                    for (var j = 1; j < inputsInFieldset.length; j++) {
                         var targetID = $(inputsInFieldset[j]).data('target');
+                        console.log('all checked targetID: ',targetID);
                         $('.' + targetID).addClass('visible');
                     }
                 } else {
-                    for (var j = 1; j < inputGroups.length; j++) {
+                    for (var j = 1; j < inputsInFieldset.length; j++) {
+                        console.log('groupsLength', inputGroups.length)
                         var targetID = $(inputsInFieldset[j]).data('target');
+                        console.log('links', $('.' + targetID))
                         if ($(inputsInFieldset[j]).prop('checked')) {
                             $('.' + targetID).addClass('visible');
                         } else {
@@ -147,13 +152,13 @@
 
       /* Commands on init */
       $(mainGroupInputs[0]).prop('checked', true);
-      $('#itemsSection a').addClass('visible');
+      $('#itemsSection .list-item').addClass('visible');
       for (var i = 1; i < fieldsets.length; i++) {
           $(fieldsets[i]).hide();
       }
 
       // Pagination init
-      listItems = $('#itemsSection a.list-item');
+      listItems = $('#itemsSection .list-item');
       totalPages = Math.ceil(listItems.length/10);
 
       if (listItems.length>10) {
