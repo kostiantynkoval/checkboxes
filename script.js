@@ -3,7 +3,7 @@
 
 
     // Global show group variables
-    var allInputs = $('form input');
+    var allInputs = $('form#fieldsets input');
     var fieldsets = $('fieldset');
     var currentPage = 0;
     var totalPages = 1;
@@ -56,7 +56,6 @@
                 if ($(this).prop('checked')) {
                     $(inputs[0]).prop('checked', false);
                 }
-                console.log('checked', $(this).data('target'));
                 handleCheckboxes();
                 listItems = $('#itemsSection .list-item.visible');
                 if (listItems.length>10) {
@@ -82,22 +81,19 @@
             }
             $('#itemsSection .list-item').addClass('visible');
         } else {
+
             var inputGroups = $('.inputs-group');
             for (var i = 1; i < inputGroups.length; i++) {
                 var inputsInFieldset = $(inputGroups[i]).find('input');
-                console.log('inputsInFieldset', inputsInFieldset);
 
                 if ($(inputsInFieldset[0]).prop('checked')) {
                     for (var j = 1; j < inputsInFieldset.length; j++) {
                         var targetID = $(inputsInFieldset[j]).data('target');
-                        console.log('all checked targetID: ',targetID);
                         $('.' + targetID).addClass('visible');
                     }
                 } else {
                     for (var j = 1; j < inputsInFieldset.length; j++) {
-                        console.log('groupsLength', inputGroups.length)
                         var targetID = $(inputsInFieldset[j]).data('target');
-                        console.log('links', $('.' + targetID))
                         if ($(inputsInFieldset[j]).prop('checked')) {
                             $('.' + targetID).addClass('visible');
                         } else {
